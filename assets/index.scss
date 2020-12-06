@@ -1,0 +1,63 @@
+@charset "utf-8";
+@import "~bulma/sass/utilities/_all";
+
+// variable
+$primary: #81B29A;
+$primary-invert: findColorInvert($primary);
+$primary-light: findLightColor($primary);
+$primary-dark: findDarkColor($primary);
+
+
+$dark: #3D405B;
+$dark-invert: findColorInvert($dark);
+$dark-light: findLightColor($dark);
+$dark-dark: findDarkColor($dark);
+
+$danger: #E07A5F;
+$danger-invert: findColorInvert($danger);
+$danger-light: findLightColor($danger);
+$danger-dark: findDarkColor($danger);
+
+
+$warning: #F2CC8F;
+$warning-invert: findColorInvert($warning);
+$warning-light: findLightColor($warning);
+$warning-dark: findDarkColor($warning);
+
+$success: #b7e4c7;
+$success-invert: findColorInvert($success);
+$success-light: findLightColor($success);
+$success-dark: findDarkColor($success);
+
+$info: #98c1d9;
+$info-invert: findColorInvert($info);
+$info-light: findLightColor($info);
+$info-dark: findDarkColor($info);
+
+
+// $link: #4c9bc8;
+// $link-invert: findColorInvert($link);
+// $link-light: findLightColor($link);
+// $link-dark: findDarkColor($link);
+// $link-focus-border: $primary;
+
+
+$theme: #f5f3f4;
+$theme-invert: findColorInvert($theme);
+
+$colors: (
+    "dark": ($dark, $dark-invert, $dark-light, $dark-dark),
+    "primary": ($primary, $primary-invert, $primary-light, $primary-dark),
+    "info": ($info, $info-invert, $info-light, $info-dark),
+    "success": ($success, $success-invert, $success-light, $success-dark),
+    "warning": ($warning, $warning-invert, $warning-light, $warning-dark),
+    "danger": ($danger, $danger-invert, $danger-light, $danger-dark),
+    // "link": ($link, $link-invert, $link-light, $link-dark),
+    "theme": ($theme, $theme-invert),
+);
+
+
+// Вся библиотека
+@import "~/node_modules/bulma/bulma.sass";
+@import "~buefy/src/scss/buefy";
+@import "~assets/styles/auth/extension-bulma.css"
