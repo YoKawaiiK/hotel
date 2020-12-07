@@ -1,6 +1,6 @@
 <template>
   <div>
-    Главная
+    Бронирования
   </div>
 </template>
 
@@ -8,9 +8,11 @@
 export default {
   head() {
     return {
-      title: 'Главная',
+      title: 'Бронирования',
     }
   },
+  middleware: "protected"
+
 }
 </script>
 

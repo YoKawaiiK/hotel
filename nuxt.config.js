@@ -13,12 +13,14 @@ export default {
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
-    '~/assets/styles/index.scss'
+    '~/assets/styles/index.scss',
+    '@fortawesome/fontawesome-svg-core/styles.css'
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    '~/plugins/buefy'
+    '~/plugins/buefy',
+    '~/plugins/fas'
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -34,7 +36,8 @@ export default {
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
     // https://go.nuxtjs.dev/bootstrap
-    '@nuxtjs/bulma',
+    '@nuxtjs/axios',
+    ['cookie-universal-nuxt', { alias: 'cookies' }],
   ],
 
 
@@ -42,7 +45,14 @@ export default {
     '/api': '~/server/index.js'
   },
 
-  middleware: [],
+  middleware: [
+    'loadingCookies',
+    // for secure route
+    'auth',
+    'guest',
+    // for protected route
+    'protected'
+  ],
 
   axios: {
     '/api/': { target: `${process.env.BASE_URL}/api`}

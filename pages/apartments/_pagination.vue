@@ -1,6 +1,6 @@
 <template>
   <div>
-    Главная
+    Апартаменты
   </div>
 </template>
 
@@ -8,9 +8,10 @@
 export default {
   head() {
     return {
-      title: 'Главная',
+      title: 'Апартаменты',
     }
   },
+
 }
 </script>
 

@@ -17,6 +17,13 @@ module.exports = {
   plugins: ['prettier'],
   // add your custom rules here
   rules: {
-    "no-unused-labels": "off"
+    "no-unused-labels": "off",
+    "camelcase": "off",
+    "no-console": "off",
+    "no-new": "off",
+    "require-await": "off",
+    "vue/attributes-order": "off",
+    "eqeqeq": "off",
+    "dot-notation": "off"
   },
 }
