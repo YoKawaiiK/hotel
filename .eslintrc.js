@@ -23,7 +23,9 @@ module.exports = {
     "no-new": "off",
     "require-await": "off",
     "vue/attributes-order": "off",
+    "vue/order-in-components": "off",
     "eqeqeq": "off",
-    "dot-notation": "off"
+    "dot-notation": "off",
+    "object-shorthand": 'off'
   },
 }

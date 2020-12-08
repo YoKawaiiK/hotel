@@ -29,6 +29,7 @@ const google = new GoogleStrategy({
       }
       // Не найден
       else {
+        // Создать пользователя
         const newUser = await db.query(`
           INSERT INTO users 
             (user_id, family_name, given_name, email, email_verified, role_id) 
@@ -45,16 +46,29 @@ const google = new GoogleStrategy({
         if (newUser[0].warningStatus != 0) {
           return done({signInError: true})
         }
-        else {
-          // Объект нового пользователя
-          return done({
-            user_id: profile.id,
-            role_id: 1,
-            family_name: profile.name.family_name,
-            given_name: profile.name.given_name,
-            email: profile.emails[0].value
-          })
+        
+        // Создать счет для пользователя
+        const newChecks = await db.query(`
+          INSERT INTO checks 
+            (user_id) 
+          VALUES 
+            (
+              '${profile.id}'
+            );
+        `)
+        if (newChecks[0].warningStatus != 0) {
+          return done({createCheckError: true})
         }
+
+        // Объект нового пользователя
+        return done({
+          user_id: profile.id,
+          role_id: 1,
+          family_name: profile.name.family_name,
+          given_name: profile.name.given_name,
+          email: profile.emails[0].value
+        })
+        
       }
     } 
     catch (error) {
