@@ -11,6 +11,9 @@ export default {
       title: 'Главная',
     }
   },
+  async asyncData(context) {
+    console.log(context.$dateFnsFormat(new Date(), 'dd.MM.yyyy HH:mm'));
+  }
 }
 </script>
 

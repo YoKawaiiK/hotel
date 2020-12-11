@@ -10,6 +10,7 @@ import {
     // for table
     Table,
     Field,
+    Datepicker,
 
     Select,
     Input,
@@ -28,6 +29,7 @@ Vue
     .use(Modal)
     .use(Input)
     .use(Select)
+    .use(Datepicker)
     
 
 ConfigProgrammatic.setOptions({

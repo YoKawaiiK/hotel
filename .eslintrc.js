@@ -26,6 +26,8 @@ module.exports = {
     "vue/order-in-components": "off",
     "eqeqeq": "off",
     "dot-notation": "off",
-    "object-shorthand": 'off'
+    "object-shorthand": 'off',
+    "valid-typeof": 'off',
+    "vue/v-bind-style": "off"
   },
 }

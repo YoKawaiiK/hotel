@@ -11,6 +11,8 @@ import {
     faUsers,
     faSignInAlt,
     faSignOutAlt,
+    faCalendar,
+    faArrowUp,
 
     // PostPagination
     faEdit,
@@ -34,6 +36,8 @@ library.add(
     faUsers,
     faSignInAlt,
     faSignOutAlt,
+    faCalendar,
+    faArrowUp,
 
     faEdit,
     faTrash,
