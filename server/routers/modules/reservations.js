@@ -6,29 +6,30 @@ const reservations = new Router({ prefix: '/reservations' })
 
 reservations
     
-.get(
-"/selects-reservations/" +
-":reservation_id/" +
-":user_id/" +
-":status_id/" +
-":apartment_id/" +
-":date_start/" +
-":date_final/" +
-":pagination"
-, async ctx => {
-console.log();
+// "/selects/" +
+// ":reservation_id/" +
+// ":user_id/" +
+// ":status_id/" +
+// ":apartment_id/" +
+// ":date_start/" +
+// ":date_final/" +
+// ":pagination"
+
+.get("/selects", async ctx => {
 try {
+    // console.log(ctx.query);
     protectedRoute(ctx);
 
-    const reservation_id = ctx.params.reservation_id;    
-    const user_id = ctx.params.user_id;    
-    const status_id = ctx.params.status_id;    
-    const apartment_id = ctx.params.apartment_id;  
+    const reservation_id = ctx.query.reservation_id;    
+    const user_id = ctx.query.user_id;    
+    const status_id = ctx.query.status_id;    
+    const apartment_id = ctx.query.apartment_id;  
       
-    const date_start = ctx.params.date_start;    
-    const date_final = ctx.params.date_final;    
+    const date_start = ctx.query.date_start;    
+    const date_final = ctx.query.date_final;    
+    const debt = ctx.query.debt;    
 
-    const pagination = +ctx.params.pagination;    
+    const pagination = ctx.query.pagination;    
     const rowsPerTable = process.env.ROWS_PER_TABLE;
 
     // Формирование запроса
@@ -116,13 +117,28 @@ try {
     reservationsTotalSQL += paramDate
 
 
-    const paramGroupByOrderBy = `
+    const paramGroupBy = `
     GROUP BY
         R.reservation_id
+    `
+    selectsDataSQL += paramGroupBy
+    reservationsTotalSQL += paramGroupBy
+
+    if (debt == 'true') {
+        const having = `
+        HAVING  
+            SUM( IF(S.status = 0, S.price, 0) ) > 0
+        ` 
+        selectsDataSQL += having
+        reservationsTotalSQL += having
+    }
+
+    const paramOrderBy = `
     ORDER BY R.reservation_id 
     `
-    selectsDataSQL += paramGroupByOrderBy
-    reservationsTotalSQL += paramGroupByOrderBy
+    selectsDataSQL += paramOrderBy
+    reservationsTotalSQL += paramOrderBy
+
     const paramLimit = `
     LIMIT ${(pagination * rowsPerTable) - rowsPerTable}, ${rowsPerTable}
     `

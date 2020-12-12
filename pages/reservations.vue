@@ -4,11 +4,15 @@
     <div class="column">
       <div class="box has-background-theme">
         <div class="field is-grouped is-grouped-multiline">
-          
           <b-field label="ID" label-position="on-border">
+            <b-input v-model="search.reservation_id"
+            size="is-small"></b-input>
+          </b-field>
+          <b-field label="ID клиента" label-position="on-border">
             <b-input v-model="search.user_id"
             size="is-small"></b-input>
           </b-field>
+
           <!-- <b-field label="Фамилия" label-position="on-border">
             <b-input v-model="search.given_name"
             size="is-small"></b-input>
@@ -27,6 +31,10 @@
             v-model="search.status_id"
             size="is-small"
             >
+            <option
+            :value="null">
+              Ничего
+            </option>
             <option v-for="option in selects.status" 
             :key="option.status_id"
             :value="option.status_id">
@@ -53,6 +61,9 @@
             v-model="search.apartment_id"
             size="is-small"
             >
+            <option :value="null">
+              Ничего
+            </option>
             <option v-for="option in selects.apartments" 
             :key="option.apartment_id"
             :value="option.apartment_id">
@@ -86,8 +97,14 @@
               trap-focus>
             </b-datepicker>
           </b-field>
+          <b-field >
+            <b-checkbox size="is-small"
+            v-model="search.debt"
+            >Долг на счете
+            </b-checkbox>
+          </b-field>
 
-            <div @click="clickSearch()"
+            <div @click="loadData()"
             class="button is-small">
               Найти
             </div>
@@ -316,31 +333,55 @@ export default {
     }
   },
   middleware: 'protected',
-  async asyncData({$axios, store, $dateFnsFormat}) {
-    const currentPagination = 1;
-    const default_hotel_id = 1;
-    const getSelectsData = await $axios.$get(`/api/reservations/selects-data/${default_hotel_id}`)
-
-    const defaultReservationsData = {
-      reservation_id: null,
-      user_id: null,
-
-      status_id: null,
-      apartment_id: null,
-      hotel_id: default_hotel_id,
-      date_start: $dateFnsFormat(datepicker.date_start, 'yyyy-MM-dd HH:mm'),
-      date_final:  $dateFnsFormat(datepicker.date_final, 'yyyy-MM-dd HH:mm'),
-      pagination: currentPagination
+  async asyncData({$axios, store, $dateFnsFormat, $dateFnsIsValid, route}) {
+    const query = {
+      reservation_id: route.query.reservation_id,
+      user_id: route.query.user_id,
+      status_id: route.query.status_id,
+      apartment_id: route.query.apartment_id,
+      date_start: route.query.date_start,
+      date_final: route.query.date_final,
+      pagination: route.query.pagination,
+      hotel_id: route.query.hotel_id,
+      debt: route.query.debt
     }
+    if (typeof query.reservation_id != 'number') {
+      query.reservation_id = null
+    }
+    if (query.user_id != 'number') {
+      query.user_id = null
+    }
+    if (typeof query.status_id != 'number') {
+      query.status_id = null
+    }
+    if (typeof query.apartment_id != 'number') {
+      query.apartment_id = null
+    }
+    if ($dateFnsIsValid(query.date_start) != true) {
+      query.date_start = $dateFnsFormat(datepicker.date_start, 'yyyy-MM-dd HH:mm')
+    }
+    if ($dateFnsIsValid(query.date_final) != true) {
+      query.date_final = $dateFnsFormat(datepicker.date_final, 'yyyy-MM-dd HH:mm')
+    }
+    if (typeof query.pagination != 'number' && query.pagination != undefined) {
+      query.pagination = 1
+    }
+    if (typeof query.hotel_id != 'number') {
+      query.hotel_id = 1
+    }
+    if (query.debt == 'true') {
+      query.debt = true
+    }
+    else {
+      query.debt = false
+    }
+    // console.log(query);
+    const getSelectsData = await $axios
+    .$get(`/api/reservations/selects-data/${query.hotel_id}`)
 
-    await store.dispatch('reservations/getReservations', defaultReservationsData)
+    await store.dispatch('reservations/getReservations', query)
 
     return {
-      
-      // date: {
-      //   GET_RESERVATIONS: store.getters['reservations/GET_RESERVATIONS'],
-      //   GET_reservations_total: store.getters['reservations/GET_reservations_total']
-      // },
       // Настройки
       table: {
         bordered: true,
@@ -350,27 +391,28 @@ export default {
         paginated: true,
         perPage: 10,
         paginationSize: 'is-small',
-        pagination: currentPagination,
+        pagination: query.pagination,
         showDetailIcon: true
       },
       datepicker: {
         locale: 'ru-RU',
         showWeekNumber: false
       },
-      // 
       // Параметры для полей
       search: {
-        user_id: '',
+        reservation_id: null,
+        user_id: null,
         // given_name: '',
         // family_name: '',
         // middle_name: '',
 
-        status_id: undefined,
-        apartment_id: undefined,
-        hotel_id: default_hotel_id,
+        status_id: null,
+        apartment_id: null,
+        hotel_id: query.hotel_id,
 
         date_start: undefined,
-        date_final: undefined
+        date_final: undefined,
+        debt: query.debt
       },
       selects: {
         status: getSelectsData.status,
@@ -388,38 +430,43 @@ export default {
   },
   methods: {
     ...mapActions('reservations', ['getReservations', 'getReservation']),
-    onPageChange(newPagination) {
-
-      this.table.pagination = newPagination;
-
-      const data = {
-        reservation_id: null,
-        user_id: null,
-
-        status_id: null,
-        apartment_id: null,
+    loadData() {
+      if (this.search.reservation_id == "") {
+        this.search.reservation_id = null
+      }
+      if (this.search.user_id == "") {
+        this.search.user_id = null
+      }
+      if (this.search.status_id == "") {
+        this.search.status_id = null
+      }
+      if (this.search.apartment_id == "") {
+        this.search.apartment_id = null
+      }
+      const query = {
+        reservation_id: this.search.reservation_id,
+        user_id: this.search.user_id,
+        status_id: this.search.status_id,
+        apartment_id: this.search.apartment_id,
         hotel_id: this.search.hotel_id,
         date_start: this.$dateFnsFormat(datepicker.date_start, 'yyyy-MM-dd HH:mm'),
         date_final:  this.$dateFnsFormat(datepicker.date_final, 'yyyy-MM-dd HH:mm'),
-        pagination: this.table.pagination
+        pagination: this.table.pagination,
+        debt: this.search.debt
       }
 
-      this.getReservations(data)
+      this.$router.push({name: 'reservations', query: query})
+      this.getReservations(query)
+    },
+    onPageChange(newPagination) {
+      this.table.pagination = newPagination;
+      this.loadData();
     },
     // Получить номера выбранного отеля
     GET_hotelNumbers() {
       const hotel_id = this.search.hotel_id;
       const result = this.$axios.$get(`/api/reservations/hotel-numbers/${hotel_id}`)
       this.selects.apartments = result.apartments;
-    },
-    clickSearch() {
-      const data = this.search
-      // data.date_reservation = this.$dateFnsFormat(data.date_reservation, 'yyyy.MM.dd HH:mm')
-      data.date_start = this.$dateFnsFormat(data.date_start, 'yyyy-MM-dd HH:mm')
-      data.date_final = this.$dateFnsFormat(data.date_final, 'yyyy-MM-dd HH:mm')
-      console.log(data.apartment_id.length, data.apartment_id);
-      console.log(data.family_name.length, data.family_name);
-      this.getReservation(data)
     }
   },
   mounted() {

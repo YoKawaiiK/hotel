@@ -48,7 +48,7 @@
             >Апартаменты
           </nuxt-link>
 
-          <nuxt-link 
+          <!-- <nuxt-link 
           v-show="GET_role_id == 2"
           class="navbar-item" 
           :to="{
@@ -58,6 +58,30 @@
             }
           }"
             >Бронирования
+          </nuxt-link> -->
+
+          <nuxt-link 
+          v-show="GET_role_id == 2"
+          class="navbar-item" 
+          :to="{
+            name: 'reservations',
+            query: {
+              reservation_id: null,
+              user_id: null,
+              status_id: null,
+              apartment_id: null,
+              date_start: $dateFnsFormat(
+                new Date(new Date().getFullYear(),new Date().getMonth() - 3), 
+                'yyyy-MM-dd HH:mm'
+              ),
+              date_final: $dateFnsFormat(
+                new Date(),
+                'yyyy-MM-dd HH:mm'),
+              pagination: '1',
+              hotel_id: '1'
+            }
+          }"
+            >Бронирования query
           </nuxt-link>
 
           <nuxt-link class="navbar-item" 
@@ -137,9 +161,21 @@
 
                   <li v-show="GET_role_id == 2">
                     <nuxt-link :to="{ 
-                      name: 'reservations-pagination',
-                      params: {
-                        pagination: 1
+                      name: 'reservations',
+                      query: {
+                        reservation_id: null,
+                        user_id: null,
+                        status_id: null,
+                        apartment_id: null,
+                        date_start: $dateFnsFormat(
+                          new Date(new Date().getFullYear(),new Date().getMonth() - 3), 
+                          'yyyy-MM-dd HH:mm'
+                        ),
+                        date_final: $dateFnsFormat(
+                          new Date(),
+                          'yyyy-MM-dd HH:mm'),
+                        pagination: '1',
+                        hotel_id: '1'
                       }
                     }">
                       <fas icon="ticket-alt" />

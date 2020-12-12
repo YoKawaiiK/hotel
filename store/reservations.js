@@ -61,21 +61,16 @@ export default {
     actions: {
       // Получение постов
       // data - Объект с параметрами поиска
-      async getReservations ({commit}, data) {
-        console.log(data);
+      async getReservations ({commit}, query) {
+        // console.log(query);
 
         await commit('DELETE_RESERVATIONS')
         const response = await this.$axios.$get(
           `/api/reservations/` +
-          `selects-reservations/` +
-          `${data.reservation_id}/` +
-          `${data.user_id}/` +
-          `${data.status_id}/` +
-          `${data.apartment_id}/` +
-          `${data.date_start}/` +
-          `${data.date_final}/` +
-          `${data.pagination}`
-        )
+          `selects/`
+        , {
+          params: query
+        })
 
         // console.log(response);
 

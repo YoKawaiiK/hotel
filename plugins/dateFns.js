@@ -1,6 +1,6 @@
 // import Vue from 'vue'
 
-import {format} from 'date-fns'
+import {format, isValid} from 'date-fns'
 
 // const $dateFns = {
 //     install: function(Vue) {
@@ -13,4 +13,5 @@ import {format} from 'date-fns'
 export default ({ app }, inject) => {
   // Inject $hello(msg) in Vue, context and store.
   inject('dateFnsFormat', format)
+  inject('dateFnsIsValid', isValid)
 }
