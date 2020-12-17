@@ -14,8 +14,8 @@ import {
 
     Select,
     Input,
-    Checkbox,
-    Pagination,
+    // Checkbox,
+    // Pagination,
     Modal
 } from 'buefy'
 
@@ -24,8 +24,8 @@ Vue
     .use(Field)
     .use(Sidebar)
     .use(Snackbar)
-    .use(Checkbox)
-    .use(Pagination)
+    // .use(Checkbox)
+    // .use(Pagination)
     .use(Modal)
     .use(Input)
     .use(Select)

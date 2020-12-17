@@ -3,19 +3,31 @@ import {SnackbarProgrammatic as Snackbar} from 'buefy'
 export default {
     actions: {
         // all
-        async error() {
+        error() {
             Snackbar.open({
                 message: 'Возникла ошибка при выполнении действия.',
                 type: 'is-danger'
             })
         },
         // cookies
-        async deleteCookies() {
+        deleteCookies() {
             Snackbar.open({
                 message: 'Вы вышли.',
                 type: 'is-success'
             })
         },
+        addData() {
+            Snackbar.open({
+                message: 'Заполните все данные',
+                type: 'is-info'
+            })
+        },
+        deleteReservation() {
+            Snackbar.open({
+                message: 'Резервация удалена',
+                type: 'is-warning'
+            })
+        }
         // login
         // async setLoginLenght() {
         //     Snackbar.open({

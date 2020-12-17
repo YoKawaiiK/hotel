@@ -68,20 +68,16 @@
             query: {
               reservation_id: null,
               user_id: null,
-              status_id: null,
-              apartment_id: null,
-              date_start: $dateFnsFormat(
-                new Date(new Date().getFullYear(),new Date().getMonth() - 3), 
-                'yyyy-MM-dd HH:mm'
-              ),
-              date_final: $dateFnsFormat(
-                new Date(),
-                'yyyy-MM-dd HH:mm'),
+              status_id: '0',
+              apartment_id: '0',
+              date_start: date.date_start,
+              date_final: date.date_final,
               pagination: '1',
-              hotel_id: '1'
+              hotel_id: '1',
+              debt: '0'
             }
           }"
-            >Бронирования query
+            >Бронирования
           </nuxt-link>
 
           <nuxt-link class="navbar-item" 
@@ -165,17 +161,14 @@
                       query: {
                         reservation_id: null,
                         user_id: null,
-                        status_id: null,
-                        apartment_id: null,
-                        date_start: $dateFnsFormat(
-                          new Date(new Date().getFullYear(),new Date().getMonth() - 3), 
-                          'yyyy-MM-dd HH:mm'
-                        ),
-                        date_final: $dateFnsFormat(
-                          new Date(),
-                          'yyyy-MM-dd HH:mm'),
+                        status_id: '0',
+                        apartment_id: '0',
                         pagination: '1',
-                        hotel_id: '1'
+                        hotel_id: '1',
+                        debt: '0',
+                        date_start: date.date_start,
+                        date_final: date.date_final,
+
                       }
                     }">
                       <fas icon="ticket-alt" />
@@ -242,6 +235,14 @@ export default {
       sidebarFullwidth: 'fullwidth',
       sidebarFullheight: true,
       sidebarRight: true,
+      date: {
+        date_start: this.$dateFnsFormat(
+                new Date(new Date().getFullYear(),new Date().getMonth() - 3), 
+                'dd.MM.yyyy'),
+        date_final: this.$dateFnsFormat(
+                new Date(new Date().getFullYear(),new Date().getMonth() + 1), 
+                'dd.MM.yyyy')
+      }
     }
   },
   computed: {
@@ -249,7 +250,7 @@ export default {
   },
   methods: {
     ...mapActions('cookies', ['deleteCookies']),
-  },
+  }
 }
 </script>
 
